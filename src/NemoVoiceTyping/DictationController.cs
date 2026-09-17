@@ -46,6 +46,7 @@ public sealed class DictationController : IDisposable
         _config = config;
         _panel = panel;
         _processor = new DictationProcessor(_dictionary);
+        TextInjector.Mode = config.TextInjection;
         _audio.SamplesAvailable += OnSamples;
         _audio.LevelAvailable += level =>
         {
@@ -179,6 +180,8 @@ public sealed class DictationController : IDisposable
         _tickTimer = null;
         try { _processor.FlushBuffer(); } catch (Exception ex) { Debug.WriteLine(ex); }
         try { _processor.Tick(); } catch (Exception ex) { Debug.WriteLine(ex); }
+        try { TextInjector.Flush(TimeSpan.FromSeconds(5)); } catch (Exception ex) { Debug.WriteLine(ex); }
+        try { TextInjector.RestoreClipboard(); } catch (Exception ex) { Debug.WriteLine(ex); }
         _panel.SetListening(false);
 
         switch (reason)
