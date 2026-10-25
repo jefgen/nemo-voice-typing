@@ -88,6 +88,30 @@ public partial class App : System.Windows.Application
         }
     }
 
+    private void OnTextInjectionSelected(object sender, RoutedEventArgs e)
+    {
+        if (sender is not MenuItem { Tag: string mode }) return;
+        _config.TextInjection = mode;
+        _config.Save();
+        TextInjector.Mode = mode;
+    }
+
+    /// <summary>
+    /// <see cref="TextInjector"/> treats any unrecognised mode as "auto", so the
+    /// menu checks Automatic for those rather than leaving nothing checked.
+    /// </summary>
+    private void OnTextInjectionMenuOpened(object sender, RoutedEventArgs e)
+    {
+        if (sender is not MenuItem menu) return;
+        var items = menu.Items.OfType<MenuItem>().ToList();
+        var selected = items.Find(item => IsMode(item, _config.TextInjection))
+            ?? items.Find(item => IsMode(item, "auto"));
+        foreach (var item in items) item.IsChecked = item == selected;
+    }
+
+    private static bool IsMode(MenuItem item, string mode) =>
+        string.Equals(item.Tag as string, mode, StringComparison.OrdinalIgnoreCase);
+
     private void OnExit(object sender, RoutedEventArgs e) => Shutdown();
 
     protected override void OnExit(ExitEventArgs e)

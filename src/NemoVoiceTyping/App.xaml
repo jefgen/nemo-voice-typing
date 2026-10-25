@@ -14,6 +14,17 @@
                           x:Name="StartupMenu"
                           IsCheckable="True"
                           Click="OnStartupToggle"/>
+                <MenuItem Header="Typing method" SubmenuOpened="OnTextInjectionMenuOpened">
+                    <MenuItem Header="Automatic (recommended)" Tag="auto"
+                              Click="OnTextInjectionSelected"
+                              ToolTip="Types keystrokes, but automatically pastes in places where text would be garbled, like Notepad"/>
+                    <MenuItem Header="Keystrokes" Tag="keystrokes"
+                              Click="OnTextInjectionSelected"
+                              ToolTip="Never uses the clipboard, but garbles text in Notepad and Terminal"/>
+                    <MenuItem Header="Clipboard paste" Tag="clipboard"
+                              Click="OnTextInjectionSelected"
+                              ToolTip="Most reliable, but fails where Ctrl+V is not paste"/>
+                </MenuItem>
                 <Separator/>
                 <MenuItem Header="Exit" Click="OnExit"/>
             </ContextMenu>
